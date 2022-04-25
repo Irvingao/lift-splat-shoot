@@ -127,7 +127,7 @@ dmypy.json
 # other things
 *.jpg
 *.png
-*.pt
+# *.pt
 *.json
 runs/
 goodmodel.pt.bak
@@ -135,3 +135,6 @@ goodmodel.pt.bak
 storage/
 imagenet_pretrained/
 *.csv
+
+viz_dir/
+lidar_dir/
