@@ -10,6 +10,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from PIL import Image
 import matplotlib.patches as mpatches
+import os
 
 from .data import compile_data
 from .tools import (ego_to_cam, get_only_in_img_mask, denormalize_img,
@@ -19,7 +20,7 @@ from .models import compile_model
 
 
 def lidar_check(version,
-                dataroot='/data/nuscenes',
+                dataroot='/home/innox/Dataset/nuscense-mini',
                 show_lidar=True,
                 viz_train=False,
                 nepochs=1,
@@ -38,6 +39,7 @@ def lidar_check(version,
 
                 bsz=1,
                 nworkers=10,
+                save_dir="lidar_dir/",
                 ):
     grid_conf = {
         'xbound': xbound,
@@ -70,7 +72,7 @@ def lidar_check(version,
     fig = plt.figure(figsize=(val + val/3*2*rat*3, val/3*2*rat))
     gs = mpl.gridspec.GridSpec(2, 6, width_ratios=(1, 1, 1, 2*rat, 2*rat, 2*rat))
     gs.update(wspace=0.0, hspace=0.0, left=0.0, right=1.0, top=1.0, bottom=0.0)
-
+    n = 0
     for epoch in range(nepochs):
         for batchi, (imgs, rots, trans, intrins, post_rots, post_trans, pts, binimgs) in enumerate(loader):
 
@@ -111,9 +113,13 @@ def lidar_check(version,
                 ax = plt.subplot(gs[:, 4:5])
                 plt.imshow(binimgs[si].squeeze(0).T, origin='lower', cmap='Greys', vmin=0, vmax=1)
 
-                imname = f'lcheck{epoch:03}_{batchi:05}_{si:02}.jpg'
+                # imname = f'lcheck{epoch:03}_{batchi:05}_{si:02}.jpg'
+                imname = 'lidar{}.jpg'.format(n)
                 print('saving', imname)
-                plt.savefig(imname)
+                if not os.path.isdir(save_dir):
+                    os.mkdir(save_dir)
+                plt.savefig(os.path.join(save_dir, imname))
+                n += 1
 
 
 def cumsum_check(version,
@@ -248,9 +254,9 @@ def eval_model_iou(version,
 
 def viz_model_preds(version,
                     modelf,
-                    dataroot='/data/nuscenes',
-                    map_folder='/data/nuscenes/mini',
-                    gpuid=1,
+                    dataroot='/home/innox/Dataset/nuscense-mini',
+                    map_folder='/home/innox/Dataset/nuscense-mini/mini',
+                    gpuid=0,
                     viz_train=False,
 
                     H=900, W=1600,
@@ -267,6 +273,7 @@ def viz_model_preds(version,
 
                     bsz=4,
                     nworkers=10,
+                    save_dir = "viz_dir"
                     ):
     grid_conf = {
         'xbound': xbound,
@@ -357,7 +364,11 @@ def viz_model_preds(version,
                 plt.ylim((0, out.shape[3]))
                 add_ego(bx, dx)
 
-                imname = f'eval{batchi:06}_{si:03}.jpg'
+                # imname = f'eval{batchi:06}_{si:03}.jpg'
+                imname = 'viz{}.jpg'.format(counter)
                 print('saving', imname)
-                plt.savefig(imname)
+                if not os.path.isdir(save_dir):
+                    os.mkdir(save_dir)
+                plt.savefig(os.path.join(save_dir, imname))
                 counter += 1
+                                

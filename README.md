@@ -50,6 +50,9 @@ Visualize the BEV segmentation output by a model:
 ```
 python main.py viz_model_preds mini/trainval --modelf=MODEL_LOCATION --dataroot=NUSCENES_ROOT --map_folder=NUSCENES_MAP_ROOT
 ```
+
+`python main.py viz_model_preds mini --modelf=./model525000.pt --dataroot=/home/innox/Dataset/nuscense-mini --map_folder=/home/innox/Dataset/nuscense-mini/mini`
+
 <img src="./imgs/eval.gif">
 
 ### Visualize Input/Output Data (optional)
@@ -58,6 +61,9 @@ Run a visual check to make sure extrinsics/intrinsics are being parsed correctly
 ```
 python main.py lidar_check mini/trainval --dataroot=NUSCENES_ROOT --viz_train=False
 ```
+
+`python main.py lidar_check mini --dataroot=/home/innox/Dataset/nuscense-mini --viz_train=False`
+
 <img src="./imgs/check.gif">
 
 ### Train a model (optional)
